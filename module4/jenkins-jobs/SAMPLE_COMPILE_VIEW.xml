@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<au.com.centrumsystems.hudson.plugin.buildpipeline.BuildPipelineView plugin="build-pipeline-plugin@2.2.0">
+  <name>SAMPLE_COMPILE_VIEW</name>
+  <description>Pipeline: DEVELOPER_COMPILE -&gt; DEVELOPER_CODE_REVIEW -&gt; QA_UNIT_TEST -&gt; QA_METRICS_CHECK -&gt; QA_PACKAGE</description>
+  <filterExecutors>false</filterExecutors>
+  <filterQueue>false</filterQueue>
+  <properties class="linked-list"/>
+  <selectedJob>DEVELOPER_COMPILE</selectedJob>
+  <refreshFrequency>3</refreshFrequency>
+  <showPipelineHeader>true</showPipelineHeader>
+  <showPipelineDefinitionHeader>true</showPipelineDefinitionHeader>
+  <noOfDisplayedBuilds>5</noOfDisplayedBuilds>
+  <buildViewTitle></buildViewTitle>
+  <consoleOutputLinkStyle>Lightbox</consoleOutputLinkStyle>
+  <gridBuildViewColumns>
+    <name>Build Pipeline</name>
+  </gridBuildViewColumns>
+</au.com.centrumsystems.hudson.plugin.buildpipeline.BuildPipelineView>

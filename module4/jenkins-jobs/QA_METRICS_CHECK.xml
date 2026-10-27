@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <actions/>
+  <description>Converts JaCoCo output to Cobertura and publishes coverage metrics.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>JDK-26</jdk>
+  <customWorkspace>/Users/savio.christopher/Devops-Certification-Savio</customWorkspace>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders><hudson.tasks.Shell><command>mkdir -p target/site/cobertura &amp;&amp; python3 module4/tools/jacoco2cobertura.py target/site/jacoco/jacoco.xml target/site/cobertura/coverage.xml</command></hudson.tasks.Shell></builders>
+  <publishers><io.jenkins.plugins.coverage.CoveragePublisher plugin="code-coverage-api@4.99.0"><adapters class="linked-list"><io.jenkins.plugins.coverage.adapter.CoberturaReportAdapter><path>target/site/cobertura/coverage.xml</path></io.jenkins.plugins.coverage.adapter.CoberturaReportAdapter></adapters><globalThresholds class="linked-list"/><scm></scm><sourceCodeEncoding></sourceCodeEncoding><sourceDirectories/><failUnhealthy>false</failUnhealthy><failUnstable>false</failUnstable><failNoReports>false</failNoReports><applyThresholdRecursively>false</applyThresholdRecursively><calculateDiffForChangeRequests>false</calculateDiffForChangeRequests><failBuildIfCoverageDecreasedInChangeRequest>false</failBuildIfCoverageDecreasedInChangeRequest><skipPublishingChecks>false</skipPublishingChecks><checksName>Code Coverage</checksName></io.jenkins.plugins.coverage.CoveragePublisher><hudson.tasks.BuildTrigger><childProjects>QA_PACKAGE</childProjects><threshold><name>SUCCESS</name><ordinal>0</ordinal><color>BLUE</color><completeBuild>true</completeBuild></threshold></hudson.tasks.BuildTrigger></publishers>
+  <buildWrappers/>
+</project>

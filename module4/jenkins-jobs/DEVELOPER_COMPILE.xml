@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <actions/>
+  <description>Compile the application (mvn clean compile).</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>JDK-26</jdk>
+  <customWorkspace>/Users/savio.christopher/Devops-Certification-Savio</customWorkspace>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders><hudson.tasks.Maven><targets>clean compile</targets><mavenName>Maven-3.10</mavenName><usePrivateRepository>false</usePrivateRepository><settings class="jenkins.mvn.DefaultSettingsProvider"/><globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/></hudson.tasks.Maven></builders>
+  <publishers><hudson.tasks.BuildTrigger><childProjects>DEVELOPER_CODE_REVIEW</childProjects><threshold><name>SUCCESS</name><ordinal>0</ordinal><color>BLUE</color><completeBuild>true</completeBuild></threshold></hudson.tasks.BuildTrigger></publishers>
+  <buildWrappers/>
+</project>
