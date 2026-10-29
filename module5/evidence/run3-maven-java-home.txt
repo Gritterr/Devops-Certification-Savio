@@ -1,0 +1,68 @@
+[WARNING]: Collection community.general does not support Ansible version
+2.12.10
+
+PLAY [Provision Tomcat and Maven on production hosts] **************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [10.79.140.67]
+
+TASK [tomcat : Install Java 8 (needed by Tomcat 8.5)] **************************
+ok: [10.79.140.67]
+
+TASK [tomcat : Create the tomcat group] ****************************************
+ok: [10.79.140.67]
+
+TASK [tomcat : Create the tomcat user (no login shell, runs Tomcat)] ***********
+ok: [10.79.140.67]
+
+TASK [tomcat : Create the Tomcat install directory] ****************************
+ok: [10.79.140.67]
+
+TASK [tomcat : Download the Tomcat archive to the host] ************************
+ok: [10.79.140.67]
+
+TASK [tomcat : Extract Tomcat into /opt/tomcat] ********************************
+skipping: [10.79.140.67]
+
+TASK [tomcat : Give the tomcat group ownership of the install] *****************
+ok: [10.79.140.67]
+
+TASK [tomcat : Let the tomcat group read every file in conf/] ******************
+ok: [10.79.140.67]
+
+TASK [tomcat : Let the tomcat group enter conf/] *******************************
+ok: [10.79.140.67]
+
+TASK [tomcat : Make tomcat the owner of the folders Tomcat writes to] **********
+ok: [10.79.140.67] => (item=webapps)
+ok: [10.79.140.67] => (item=work)
+ok: [10.79.140.67] => (item=temp)
+ok: [10.79.140.67] => (item=logs)
+
+TASK [tomcat : Install the Tomcat systemd unit] ********************************
+ok: [10.79.140.67]
+
+TASK [tomcat : Start Tomcat and enable it at boot] *****************************
+ok: [10.79.140.67]
+
+TASK [tomcat : Open port 8080 in the firewall] *********************************
+skipping: [10.79.140.67]
+
+TASK [maven : Install Java 8 (Maven needs a JDK)] ******************************
+ok: [10.79.140.67]
+
+TASK [maven : Download the Maven archive to the host] **************************
+ok: [10.79.140.67]
+
+TASK [maven : Extract Maven into /opt] *****************************************
+skipping: [10.79.140.67]
+
+TASK [maven : Point Maven at the JDK] ******************************************
+changed: [10.79.140.67]
+
+TASK [maven : Make mvn point to Maven 3.3.9] ***********************************
+ok: [10.79.140.67]
+
+PLAY RECAP *********************************************************************
+10.79.140.67               : ok=16   changed=1    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
+

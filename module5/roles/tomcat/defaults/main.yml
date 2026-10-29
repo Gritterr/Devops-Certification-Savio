@@ -1,0 +1,14 @@
+# Default variables for the tomcat role. Override them in group_vars or on the
+# command line with -e. Keeping values here means no path is hardcoded in tasks.
+
+tomcat_version: 8.5.31
+tomcat_url: "https://archive.apache.org/dist/tomcat/tomcat-8/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+tomcat_home: /opt/tomcat
+
+# CentOS 7 package name for Java 8. The PDF's Ubuntu package (default-jdk) does not exist here.
+tomcat_java_package: java-1.8.0-openjdk-devel
+# Where CentOS 7 puts Java 8's runtime. The PDF's Ubuntu path does not exist on CentOS.
+tomcat_java_home: /usr/lib/jvm/jre-1.8.0-openjdk
+
+# Open port 8080 in firewalld. Off by default because firewalld is not installed on this VM.
+tomcat_open_port: false

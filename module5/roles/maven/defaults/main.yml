@@ -1,0 +1,9 @@
+# Default variables for the maven role.
+
+maven_version: 3.3.9
+maven_url: "https://archive.apache.org/dist/maven/maven-3/{{ maven_version }}/binaries/apache-maven-{{ maven_version }}-bin.tar.gz"
+# Where Maven is unpacked. The PDF uses /opt.
+maven_install_dir: /opt
+maven_home: "{{ maven_install_dir }}/apache-maven-{{ maven_version }}"
+# The JDK Maven runs with (the java-1.8.0-openjdk-devel package installs it here)
+maven_java_home: /usr/lib/jvm/java-1.8.0-openjdk

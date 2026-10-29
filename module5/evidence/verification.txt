@@ -1,0 +1,9 @@
+== mvn -v
+Apache Maven 3.3.9 (bb52d8502b132ec0a5a3f4c09453c07478323dc5; 2015-11-10T16:41:47+00:00)
+Maven home: /opt/apache-maven-3.3.9
+Java version: 1.8.0_272, vendor: Red Hat, Inc.
+== tomcat
+active
+enabled
+HTTP 200
+<title>Apache Tomcat/8.5.31</title>

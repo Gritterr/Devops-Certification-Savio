@@ -1,0 +1,113 @@
+# Tasks for Tomcat. Each task names the PDF step it replaces.
+# Ansible runs them in order. Each task is idempotent: if the state is already
+# correct, the task reports "ok" and changes nothing.
+
+# PDF steps 1-2: apt-get update / install default-jdk
+- name: Install Java 8 (needed by Tomcat 8.5)
+  yum:
+    name: "{{ tomcat_java_package }}"
+    state: present
+
+# PDF steps 3-4: groupadd tomcat / useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+- name: Create the tomcat group
+  group:
+    name: tomcat
+    state: present
+
+- name: Create the tomcat user (no login shell, runs Tomcat)
+  user:
+    name: tomcat
+    group: tomcat
+    shell: /bin/false
+    home: "{{ tomcat_home }}"
+    create_home: false
+    state: present
+
+# PDF steps 5-8: curl -O ... / mkdir /opt/tomcat (the PDF repeats mkdir; one task is enough)
+- name: Create the Tomcat install directory
+  file:
+    path: "{{ tomcat_home }}"
+    state: directory
+    mode: "0755"
+
+- name: Download the Tomcat archive to the host
+  get_url:
+    url: "{{ tomcat_url }}"
+    dest: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    mode: "0644"
+
+# PDF step 7: tar xzvf ... -C /opt/tomcat --strip-components=1
+# creates: makes this task skip when Tomcat is already extracted (idempotency).
+- name: Extract Tomcat into /opt/tomcat
+  unarchive:
+    src: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    dest: "{{ tomcat_home }}"
+    remote_src: true
+    extra_opts: ["--strip-components=1"]
+    creates: "{{ tomcat_home }}/bin/startup.sh"
+
+# PDF steps 10-13: chgrp -R tomcat / chmod g+r,g+x conf / chown -R tomcat webapps work temp logs
+- name: Give the tomcat group ownership of the install
+  file:
+    path: "{{ tomcat_home }}"
+    group: tomcat
+    recurse: true
+
+# chmod -R g+r conf: Tomcat ships its config files readable only by their owner,
+# so without this the tomcat user cannot read server.xml and Tomcat exits at startup.
+- name: Let the tomcat group read every file in conf/
+  file:
+    path: "{{ tomcat_home }}/conf"
+    state: directory
+    mode: "g+r"
+    recurse: true
+  notify: Restart tomcat
+
+# chmod g+x conf: lets the tomcat group enter the conf/ folder itself
+- name: Let the tomcat group enter conf/
+  file:
+    path: "{{ tomcat_home }}/conf"
+    state: directory
+    mode: "g+x"
+  notify: Restart tomcat
+
+- name: Make tomcat the owner of the folders Tomcat writes to
+  file:
+    path: "{{ tomcat_home }}/{{ item }}"
+    state: directory
+    owner: tomcat
+    recurse: true
+  loop:
+    - webapps
+    - work
+    - temp
+    - logs
+
+# PDF step 14: write /etc/systemd/system/tomcat.service
+# The template fills in the variables. The handler restarts Tomcat only when the file changes.
+- name: Install the Tomcat systemd unit
+  template:
+    src: tomcat.service.j2
+    dest: /etc/systemd/system/tomcat.service
+    mode: "0644"
+  notify:
+    - Reload systemd
+    - Restart tomcat
+
+# PDF steps 15-16: systemctl daemon-reload / systemctl start tomcat
+# (the handlers run daemon-reload and restart; this task makes sure the service is on and enabled)
+- name: Start Tomcat and enable it at boot
+  systemd:
+    name: tomcat
+    state: started
+    enabled: true
+    daemon_reload: true
+
+# Not in the PDF: lets other machines reach Tomcat on port 8080.
+- name: Open port 8080 in the firewall
+  ansible.posix.firewalld:
+    port: 8080/tcp
+    permanent: true
+    immediate: true
+    state: enabled
+  when: tomcat_open_port | bool

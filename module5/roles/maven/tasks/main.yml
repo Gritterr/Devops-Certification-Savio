@@ -1,0 +1,47 @@
+# Tasks for Maven, following the PDF's Maven steps.
+# The PDF's Ubuntu-only lines (python-software-properties, the webupd8team PPA)
+# are dropped: they don't apply to CentOS 7.
+
+# PDF step 4: apt-get install default-jdk. Maven needs a JDK, which the tomcat role also installs.
+- name: Install Java 8 (Maven needs a JDK)
+  yum:
+    name: java-1.8.0-openjdk-devel
+    state: present
+
+# PDF step 5: download the Maven archive. The PDF's mirror is dead; this uses the Apache archive.
+# The file is saved to /tmp, not /home/edureka/Downloads, because that user does not exist here.
+- name: Download the Maven archive to the host
+  get_url:
+    url: "{{ maven_url }}"
+    dest: "/tmp/apache-maven-{{ maven_version }}-bin.tar.gz"
+    mode: "0644"
+
+# PDF step 6: cd /opt/ && sudo tar -xzvf ...
+- name: Extract Maven into /opt
+  unarchive:
+    src: "/tmp/apache-maven-{{ maven_version }}-bin.tar.gz"
+    dest: "{{ maven_install_dir }}"
+    remote_src: true
+    creates: "{{ maven_home }}/bin/mvn"
+
+# Not in the PDF: the mvn script reads /etc/mavenrc at startup. Setting JAVA_HOME
+# here makes Maven use a known JDK on every server, whatever JAVA_HOME the
+# login environment has. (On the target VM, /etc/environment points JAVA_HOME
+# at a JDK that does not exist, which made "mvn -v" fail.)
+- name: Point Maven at the JDK
+  copy:
+    dest: /etc/mavenrc
+    content: |
+      # Managed by Ansible (maven role)
+      JAVA_HOME={{ maven_java_home }}
+    mode: "0644"
+
+# PDF step 7: update-alternatives --install /usr/bin/mvn maven /opt/apache-maven-3.3.9/bin/mvn 1001
+# "alternatives" lets several versions of a tool coexist; the highest priority wins.
+# The module comes from the community.general collection (see requirements.yml).
+- name: Make mvn point to Maven {{ maven_version }}
+  community.general.alternatives:
+    name: mvn
+    link: /usr/bin/mvn
+    path: "{{ maven_home }}/bin/mvn"
+    priority: 1001

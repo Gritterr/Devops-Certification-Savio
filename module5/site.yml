@@ -1,0 +1,9 @@
+# The playbook: a list of "plays". Each play says which hosts to run on
+# and which roles to apply. Roles hold the actual work.
+- name: Provision Tomcat and Maven on production hosts
+  hosts: prod
+  # Run every task with sudo (the "sudo" in the PDF's shell commands)
+  become: true
+  roles:
+    - tomcat
+    - maven
