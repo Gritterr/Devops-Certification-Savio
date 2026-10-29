@@ -1,0 +1,11 @@
+Job1-Puppet-Agent #1 SUCCESS 19:11:08 | Started by an SCM change
+Job1-Puppet-Agent #2 SUCCESS 19:15:31 | Started by an SCM change
+Job1-Puppet-Agent #3 SUCCESS 19:30:10 | Started by an SCM change
+Job2-Ansible-Docker #1 SUCCESS 19:15:39 | Started by upstream project "Job1-Puppet-Agent" build number 1
+Job2-Ansible-Docker #2 SUCCESS 19:18:44 | Started by upstream project "Job1-Puppet-Agent" build number 2
+Job2-Ansible-Docker #3 SUCCESS 19:30:40 | Started by upstream project "Job1-Puppet-Agent" build number 3
+Job3-Build-Deploy-PHP #1 SUCCESS 19:18:54 | Started by upstream project "Job2-Ansible-Docker" build number 1
+Job3-Build-Deploy-PHP #2 SUCCESS 19:22:29 | Started by upstream project "Job2-Ansible-Docker" build number 2
+Job3-Build-Deploy-PHP #3 SUCCESS 19:34:00 | Started by upstream project "Job2-Ansible-Docker" build number 3
+Job3-Build-Deploy-PHP #4 FAILURE 19:34:36 | Started by user admin
+Job3-Build-Deploy-PHP #5 SUCCESS 19:35:16 | Started by user admin

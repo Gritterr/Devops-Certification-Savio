@@ -1,0 +1,40 @@
+Started by upstream project "Job1-Puppet-Agent" build number 3
+originally caused by:
+ Started by an SCM change
+Running as SYSTEM
+Building on the built-in node in workspace /Users/savio.christopher/.jenkins/workspace/Job2-Ansible-Docker
+[Job2-Ansible-Docker] $ /bin/bash /var/folders/x0/5k41gyz54zq__l21ltpnt1240000gq/T/jenkins1558451681873190105.sh
+
+PLAY [Install Docker on the test server] ***************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [10.79.140.67]
+
+TASK [Add Docker's yum repository] *********************************************
+ok: [10.79.140.67]
+
+TASK [Install Docker (CentOS/RHEL)] ********************************************
+ok: [10.79.140.67]
+
+TASK [Install Docker (Ubuntu/Debian)] ******************************************
+skipping: [10.79.140.67]
+
+TASK [Start Docker and enable it at boot] **************************************
+ok: [10.79.140.67]
+
+TASK [Add the login user to the docker group] **********************************
+ok: [10.79.140.67]
+
+TASK [Show the installed Docker version] ***************************************
+ok: [10.79.140.67]
+
+TASK [Docker version] **********************************************************
+ok: [10.79.140.67] => {
+    "msg": "Docker version 26.1.4, build 5650f9b"
+}
+
+PLAY RECAP *********************************************************************
+10.79.140.67               : ok=7    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+
+Triggering a new build of Job3-Build-Deploy-PHP
+Finished: SUCCESS

@@ -1,0 +1,64 @@
+Started by user admin
+Running as SYSTEM
+Building remotely on test-server in workspace /home/admin/jenkins-agent/workspace/Job3-Build-Deploy-PHP
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /home/admin/jenkins-agent/workspace/Job3-Build-Deploy-PHP/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Gritterr/projCert.git # timeout=10
+Fetching upstream changes from https://github.com/Gritterr/projCert.git
+ > git --version # timeout=10
+ > git --version # 'git version 1.8.3.1'
+ > git fetch --tags --progress https://github.com/Gritterr/projCert.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 5d0970dd125146507de712d5cd33f1b2def00acd (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 5d0970dd125146507de712d5cd33f1b2def00acd # timeout=10
+Commit message: "Show the CI/CD pipeline on the home page"
+ > git rev-list --no-walk 5d0970dd125146507de712d5cd33f1b2def00acd # timeout=10
+[Job3-Build-Deploy-PHP] $ /bin/bash /tmp/jenkins7047309978448229936.sh
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 526B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/devopsedu/webapp:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 58B done
+#3 DONE 0.0s
+
+#4 [1/3] FROM docker.io/devopsedu/webapp:latest
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 530B done
+#5 DONE 0.0s
+
+#6 [2/3] RUN rm -f /var/www/html/index.html
+#6 CACHED
+
+#7 [3/3] COPY website/ /var/www/html/
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 writing image sha256:76cf65738d1e8b1b0b82626fbb4fc35cb442a5a922f21e9fd1737175773b1d4e done
+#8 naming to docker.io/library/projcert-php:5 done
+#8 naming to docker.io/library/projcert-php:latest done
+#8 DONE 0.0s
+1330b11763e8df9390007e1833d8407154a18e0451754cea71721cd3eb6a826d
+Deployed build 5: http://10.79.140.67:8081/
+Performing Post build task...
+Could not match :Build step 'Execute shell' marked build as failure  : False
+Logical operation result is FALSE
+Skipping script  : #!/bin/bash
+# Task 4: if Job 3 fails, delete the running container on the test server.
+# Run by the Post-build Task plugin when Job 3's log shows a failed build step.
+echo "Job 3 failed: removing the php-website container from the test server"
+docker rm -f php-website || true
+
+END OF POST BUILD TASK 	: 0
+Finished: SUCCESS

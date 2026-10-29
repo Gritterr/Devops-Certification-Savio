@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<au.com.centrumsystems.hudson.plugin.buildpipeline.BuildPipelineView plugin="build-pipeline-plugin">
+  <name>Project1-Pipeline</name>
+  <description>Job1-Puppet-Agent -&gt; Job2-Ansible-Docker -&gt; Job3-Build-Deploy-PHP</description>
+  <filterExecutors>false</filterExecutors>
+  <filterQueue>false</filterQueue>
+  <properties class="linked-list"/>
+  <selectedJob>Job1-Puppet-Agent</selectedJob>
+  <refreshFrequency>3</refreshFrequency>
+  <showPipelineHeader>true</showPipelineHeader>
+  <showPipelineDefinitionHeader>true</showPipelineDefinitionHeader>
+  <noOfDisplayedBuilds>5</noOfDisplayedBuilds>
+  <buildViewTitle></buildViewTitle>
+  <consoleOutputLinkStyle>Lightbox</consoleOutputLinkStyle>
+</au.com.centrumsystems.hudson.plugin.buildpipeline.BuildPipelineView>

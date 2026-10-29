@@ -1,0 +1,83 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<project>
+  <description>Job 3: build the PHP website image from the git repo's Dockerfile and deploy it on the test server. If it fails, a post-build task deletes the running container.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.BooleanParameterDefinition>
+          <name>SIMULATE_FAILURE</name>
+          <description>Fail on purpose after deploying, to test that the container is deleted on failure.</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs><hudson.plugins.git.UserRemoteConfig><url>https://github.com/Gritterr/projCert.git</url></hudson.plugins.git.UserRemoteConfig></userRemoteConfigs>
+    <branches><hudson.plugins.git.BranchSpec><name>*/master</name></hudson.plugins.git.BranchSpec></branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="empty-list"/>
+    <extensions/>
+  </scm>
+  <assignedNode>test-server</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell><command>#!/bin/bash
+# Job 3: build the PHP website image from the Dockerfile in the git repo and
+# deploy it as a container on the test server. Runs on the agent "test-server"
+# in a checkout of the repo's master branch.
+set -eu
+IMAGE=projcert-php
+CONTAINER=php-website
+PORT=8081            # 80 and 8080 are already used on this test server
+
+docker build -t "$IMAGE:$BUILD_NUMBER" -t "$IMAGE:latest" .
+
+# Replace the previous deployment
+docker rm -f "$CONTAINER" &gt;/dev/null 2&gt;&amp;1 || true
+docker run -d --name "$CONTAINER" --restart unless-stopped -p "$PORT:80" "$IMAGE:$BUILD_NUMBER"
+
+# Smoke test: the home page must load and show the site's title
+for i in $(seq 1 20); do curl -fs -o /dev/null "http://localhost:$PORT/" &amp;&amp; break; sleep 1; done
+curl -fs "http://localhost:$PORT/" | grep -q "Simple PHP Website"
+
+# Lets the failure path (Post-build Task) be demonstrated on demand
+if [ "${SIMULATE_FAILURE:-false}" = "true" ]; then
+  echo "SIMULATE_FAILURE=true: failing on purpose to test the cleanup step"
+  exit 1
+fi
+
+echo "Deployed build $BUILD_NUMBER: http://10.79.140.67:$PORT/"
+</command></hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task">
+      <tasks>
+        <hudson.plugins.postbuildtask.TaskProperties>
+          <logTexts>
+            <hudson.plugins.postbuildtask.LogProperties>
+              <logText>Build step 'Execute shell' marked build as failure</logText>
+              <operator>AND</operator>
+            </hudson.plugins.postbuildtask.LogProperties>
+          </logTexts>
+          <EscalateStatus>false</EscalateStatus>
+          <RunIfJobSuccessful>false</RunIfJobSuccessful>
+          <script>#!/bin/bash
+# Task 4: if Job 3 fails, delete the running container on the test server.
+# Run by the Post-build Task plugin when Job 3's log shows a failed build step.
+echo "Job 3 failed: removing the php-website container from the test server"
+docker rm -f php-website || true
+</script>
+        </hudson.plugins.postbuildtask.TaskProperties>
+      </tasks>
+    </hudson.plugins.postbuildtask.PostbuildTask>
+  </publishers>
+  <buildWrappers/>
+</project>

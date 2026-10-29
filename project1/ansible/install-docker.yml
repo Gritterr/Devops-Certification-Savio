@@ -1,0 +1,53 @@
+# Job 2: install Docker on the test server.
+# Works on CentOS/RHEL (yum, Docker's own repo) and Ubuntu/Debian (apt, docker.io).
+- name: Install Docker on the test server
+  hosts: test_server
+  become: true
+  tasks:
+    # Same as Docker's documented "yum-config-manager --add-repo" step.
+    # force: false leaves an existing repo file alone.
+    - name: Add Docker's yum repository
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+        mode: "0644"
+        force: false
+      when: ansible_os_family == "RedHat"
+
+    - name: Install Docker (CentOS/RHEL)
+      yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Install Docker (Ubuntu/Debian)
+      apt:
+        name: docker.io
+        state: present
+        update_cache: true
+      when: ansible_os_family == "Debian"
+
+    - name: Start Docker and enable it at boot
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    # Lets the Jenkins agent (running as this user) use docker without sudo
+    - name: Add the login user to the docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: true
+
+    - name: Show the installed Docker version
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Docker version
+      debug:
+        msg: "{{ docker_version.stdout }}"

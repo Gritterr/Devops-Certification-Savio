@@ -1,0 +1,28 @@
+Started by an SCM change
+Running as SYSTEM
+Building remotely on test-server in workspace /home/admin/jenkins-agent/workspace/Job1-Puppet-Agent
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /home/admin/jenkins-agent/workspace/Job1-Puppet-Agent/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Gritterr/projCert.git # timeout=10
+Fetching upstream changes from https://github.com/Gritterr/projCert.git
+ > git --version # timeout=10
+ > git --version # 'git version 1.8.3.1'
+ > git fetch --tags --progress https://github.com/Gritterr/projCert.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 5d0970dd125146507de712d5cd33f1b2def00acd (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 5d0970dd125146507de712d5cd33f1b2def00acd # timeout=10
+Commit message: "Show the CI/CD pipeline on the home page"
+ > git rev-list --no-walk bbe824b657e13f723a421e7773a000367442f61a # timeout=10
+[Job1-Puppet-Agent] $ /bin/bash /tmp/jenkins8639785386892335013.sh
+Puppet agent version: 7.34.0
+Configured server:    puppet
+Configured certname:  nebula-sc-vm-1
+Notice: Compiled catalog for nebula-sc-vm-1 in environment production in 0.02 seconds
+Notice: Puppet agent on nebula-sc-vm-1 is installed and configured
+Notice: /Stage[main]/Main/Notify[Puppet agent on nebula-sc-vm-1 is installed and configured]/message: defined 'message' as 'Puppet agent on nebula-sc-vm-1 is installed and configured'
+Notice: Applied catalog in 0.01 seconds
+Triggering a new build of Job2-Ansible-Docker
+Finished: SUCCESS

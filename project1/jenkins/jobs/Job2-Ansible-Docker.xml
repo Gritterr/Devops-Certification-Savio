@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<project>
+  <description>Job 2: push the Ansible configuration that installs Docker on the test server.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>built-in</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell><command>#!/bin/bash
+# Job 2: push the Ansible configuration that installs Docker on the test server.
+# Runs on the Jenkins master (built-in node), where Ansible is installed.
+set -eu
+cd /Users/savio.christopher/Devops-Certification-Savio/project1/ansible
+# ansible-core 2.12: the last release that can manage CentOS 7's Python 3.6
+~/.local/share/venvs/ansible-core-2.12/bin/ansible-playbook install-docker.yml
+</command></hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>Job3-Build-Deploy-PHP</childProjects>
+      <threshold><name>SUCCESS</name><ordinal>0</ordinal><color>BLUE</color><completeBuild>true</completeBuild></threshold>
+    </hudson.tasks.BuildTrigger>
+  </publishers>
+  <buildWrappers/>
+</project>
