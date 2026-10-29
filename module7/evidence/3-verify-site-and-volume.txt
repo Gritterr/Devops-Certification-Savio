@@ -1,0 +1,29 @@
+$ curl http://10.79.140.67/ (title)
+HTTP 200
+<title>unapp Template</title>
+
+$ docker volume ls
+DRIVER    VOLUME NAME
+local     company_website-data
+
+$ mounts of each replica (volume name -> source on host)
+/company_website.3.xkn8yw0g2g01zt9z914opq17f: company_website-data -> /var/lib/docker/volumes/company_website-data/_data -> /usr/local/apache2/htdocs
+/company_website.2.ujl2x4xhof8h4w4qz5dgqasmf: company_website-data -> /var/lib/docker/volumes/company_website-data/_data -> /usr/local/apache2/htdocs
+/company_website.1.xeqoa60od2lvky4pr68ltgftd: company_website-data -> /var/lib/docker/volumes/company_website-data/_data -> /usr/local/apache2/htdocs
+
+$ write one file into the volume on the host: /var/lib/docker/volumes/company_website-data/_data/volume-check.html
+
+$ read it back through each replica
+/company_website.3.xkn8yw0g2g01zt9z914opq17f: served from the shared volume
+/company_website.2.ujl2x4xhof8h4w4qz5dgqasmf: served from the shared volume
+/company_website.1.xeqoa60od2lvky4pr68ltgftd: served from the shared volume
+
+$ request it 6 times through port 80 (routing mesh spreads requests across replicas)
+served from the shared volume
+served from the shared volume
+served from the shared volume
+served from the shared volume
+served from the shared volume
+served from the shared volume
+
+(test file removed)

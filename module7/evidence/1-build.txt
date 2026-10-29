@@ -1,0 +1,65 @@
+$ docker build -t company-website:1.0 .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 648B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/httpd:2.4
+#2 DONE 0.9s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 230B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/httpd:2.4@sha256:d3accb516506c05ae0068bb54ba6798a10b249b64db91268fca692326cb02b4b
+#4 resolve docker.io/library/httpd:2.4@sha256:d3accb516506c05ae0068bb54ba6798a10b249b64db91268fca692326cb02b4b done
+#4 sha256:6fc242d221a673263eabd14a9ad9584d3177c96e5cb504c891497338e2f912f5 2.10MB / 29.86MB 0.1s
+#4 sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1 0B / 32B 0.1s
+#4 sha256:d3accb516506c05ae0068bb54ba6798a10b249b64db91268fca692326cb02b4b 10.14kB / 10.14kB done
+#4 sha256:c492904b9367e83e16e0e8c0a3175b0bb97b861023a17dcdfd09cd4c8b6efd9f 2.09kB / 2.09kB done
+#4 sha256:8110099cc30bd98a5b4c11e84cd69b0dc2a85eca846a68a11cccb4a03ce99bc3 7.98kB / 7.98kB done
+#4 sha256:22ce773c1ed1394d5dce9c11e2f0337820ae95a692f9bc6f48beef3a9e7df923 0B / 146B 0.1s
+#4 sha256:6fc242d221a673263eabd14a9ad9584d3177c96e5cb504c891497338e2f912f5 22.02MB / 29.86MB 0.2s
+#4 sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1 32B / 32B 0.2s done
+#4 sha256:580ce4f97bc3602c6d3a4e760441b87ab736b20448b17daf51fc4da74c0afbc6 0B / 2.01MB 0.2s
+#4 sha256:6fc242d221a673263eabd14a9ad9584d3177c96e5cb504c891497338e2f912f5 29.86MB / 29.86MB 0.4s
+#4 sha256:22ce773c1ed1394d5dce9c11e2f0337820ae95a692f9bc6f48beef3a9e7df923 146B / 146B 0.2s done
+#4 sha256:580ce4f97bc3602c6d3a4e760441b87ab736b20448b17daf51fc4da74c0afbc6 2.01MB / 2.01MB 0.4s
+#4 sha256:4a12aab7af459ff676a40d61ddadcb9c9e16894628c9d93775238baeb052a71b 13.46MB / 13.46MB 0.4s
+#4 sha256:6fc242d221a673263eabd14a9ad9584d3177c96e5cb504c891497338e2f912f5 29.86MB / 29.86MB 0.4s done
+#4 extracting sha256:6fc242d221a673263eabd14a9ad9584d3177c96e5cb504c891497338e2f912f5
+#4 ...
+
+#5 [internal] load build context
+#5 transferring context: 30.47MB 0.3s done
+#5 DONE 0.8s
+
+#4 [1/2] FROM docker.io/library/httpd:2.4@sha256:d3accb516506c05ae0068bb54ba6798a10b249b64db91268fca692326cb02b4b
+#4 sha256:580ce4f97bc3602c6d3a4e760441b87ab736b20448b17daf51fc4da74c0afbc6 2.01MB / 2.01MB 0.6s done
+#4 sha256:4a12aab7af459ff676a40d61ddadcb9c9e16894628c9d93775238baeb052a71b 13.46MB / 13.46MB 0.8s done
+#4 sha256:f39e6d442c0c61fcdd1d48a295c4066e451bdf11cc5dc47f35fd76a16e09ecaf 291B / 291B 0.9s done
+#4 extracting sha256:6fc242d221a673263eabd14a9ad9584d3177c96e5cb504c891497338e2f912f5 1.6s done
+#4 extracting sha256:22ce773c1ed1394d5dce9c11e2f0337820ae95a692f9bc6f48beef3a9e7df923 done
+#4 extracting sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1 done
+#4 extracting sha256:580ce4f97bc3602c6d3a4e760441b87ab736b20448b17daf51fc4da74c0afbc6
+#4 extracting sha256:580ce4f97bc3602c6d3a4e760441b87ab736b20448b17daf51fc4da74c0afbc6 0.2s done
+#4 extracting sha256:4a12aab7af459ff676a40d61ddadcb9c9e16894628c9d93775238baeb052a71b
+#4 extracting sha256:4a12aab7af459ff676a40d61ddadcb9c9e16894628c9d93775238baeb052a71b 0.5s done
+#4 extracting sha256:f39e6d442c0c61fcdd1d48a295c4066e451bdf11cc5dc47f35fd76a16e09ecaf
+#4 extracting sha256:f39e6d442c0c61fcdd1d48a295c4066e451bdf11cc5dc47f35fd76a16e09ecaf done
+#4 DONE 3.2s
+
+#6 [2/2] COPY website/ /usr/local/apache2/htdocs/
+#6 DONE 0.2s
+
+#7 exporting to image
+#7 exporting layers
+#7 exporting layers 0.3s done
+#7 writing image sha256:81f1b61411160500c29fb338a2728acb27394265899cbf036e897224e004b5c6 done
+#7 naming to docker.io/library/company-website:1.0 done
+#7 DONE 0.3s
+
+$ docker image ls company-website
+REPOSITORY        TAG       IMAGE ID       CREATED        SIZE
+company-website   1.0       81f1b6141116   1 second ago   147MB

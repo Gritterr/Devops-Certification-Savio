@@ -1,0 +1,28 @@
+$ docker swarm init --advertise-addr 10.79.140.67
+Swarm initialized: current node (j63946zjhi4fgl70ac6t84t3p) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+
+$ docker node ls
+ID                            HOSTNAME         STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+j63946zjhi4fgl70ac6t84t3p *   nebula-sc-vm-1   Ready     Active         Leader           26.1.4
+
+$ docker stack deploy -c docker-stack.yml company
+Since --detach=false was not specified, tasks will be created in the background.
+In a future release, --detach=false will become the default.
+Creating network company_default
+Creating service company_website
+
+$ docker stack services company
+ID             NAME              MODE         REPLICAS   IMAGE                 PORTS
+brjluy1g7dwj   company_website   replicated   3/3        company-website:1.0   *:80->80/tcp
+
+$ docker service ps company_website
+NAME                NODE             CURRENT STATE          ERROR
+company_website.1   nebula-sc-vm-1   Running 1 second ago   
+company_website.2   nebula-sc-vm-1   Running 1 second ago   
+company_website.3   nebula-sc-vm-1   Running 1 second ago   

@@ -1,0 +1,26 @@
+$ docker tag company-website:1.0 saviochristopher/company-website:1.0
+
+$ docker image ls --filter reference=*company-website*
+REPOSITORY        TAG       IMAGE ID       CREATED          SIZE
+company-website   1.0       81f1b6141116   15 minutes ago   147MB
+saviochristopher/company-website   1.0       81f1b6141116   15 minutes ago   147MB
+
+$ docker push saviochristopher/company-website:1.0
+The push refers to repository [docker.io/saviochristopher/company-website]
+63fc93d1e574: Preparing
+3ccba844d142: Preparing
+f8f949b5e7bf: Preparing
+94e5aca21fe2: Preparing
+5f70bf18a086: Preparing
+fa710c537cb2: Preparing
+a5d6d345f6af: Preparing
+fa710c537cb2: Waiting
+a5d6d345f6af: Waiting
+f8f949b5e7bf: Mounted from library/httpd
+5f70bf18a086: Mounted from library/httpd
+94e5aca21fe2: Mounted from library/httpd
+3ccba844d142: Mounted from library/httpd
+fa710c537cb2: Mounted from library/httpd
+a5d6d345f6af: Mounted from library/httpd
+63fc93d1e574: Pushed
+1.0: digest: sha256:4aa5ebdc8272e8f7d57ea09260cd6327969a7930a560ab17b6b305ffef0b5a76 size: 1783
