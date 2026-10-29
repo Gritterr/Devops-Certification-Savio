@@ -1,0 +1,25 @@
+# Output of the first test against the unpinned "mongo" image (MongoDB 9.0.4),
+# copied from the terminal of that run.
+
+$ curl -X POST http://10.79.140.67:30888/AddEmployee -d 'fname=Savio&lname=Christopher&empid=E101&dept=DevOps&dsgn=Engineer&sal=50000'
+Added employee with id  E101 into the employee collection failed.
+
+$ kubectl exec deploy/mongo -- mongod --version | head -1
+db version v9.0.4
+
+$ kubectl logs deploy/employee --tail=15
+{ [MongoError: Unsupported OP_QUERY command: insert. The client driver may require an upgrade. For more details see https://dochub.mongodb.org/core/legacy-opcode-removal]
+  name: 'MongoError',
+  message: 'Unsupported OP_QUERY command: insert. The client driver may require an upgrade. For more details see https://dochub.mongodb.org/core/legacy-opcode-removal',
+  ok: 0,
+  errmsg: 'Unsupported OP_QUERY command: insert. The client driver may require an upgrade. For more details see https://dochub.mongodb.org/core/legacy-opcode-removal',
+  code: 352,
+  codeName: 'UnsupportedOpQueryCommand' }
+Connection established to mongodb://10.43.149.151:27017/employee
+{ [MongoError: Unsupported OP_QUERY command: find. The client driver may require an upgrade. For more details see https://dochub.mongodb.org/core/legacy-opcode-removal]
+  name: 'MongoError',
+  message: 'Unsupported OP_QUERY command: find. The client driver may require an upgrade. For more details see https://dochub.mongodb.org/core/legacy-opcode-removal',
+  ok: 0,
+  errmsg: 'Unsupported OP_QUERY command: find. The client driver may require an upgrade. For more details see https://dochub.mongodb.org/core/legacy-opcode-removal',
+  code: 352,
+  codeName: 'UnsupportedOpQueryCommand' }

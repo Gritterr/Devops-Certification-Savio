@@ -1,0 +1,6 @@
+$ curl -X POST http://10.79.140.67:30888/AddEmployee -d 'fname=Savio&lname=Christopher&empid=E101&dept=DevOps&dsgn=Engineer&sal=50000'
+Added employee with id  E101 into the employee collection.
+
+$ curl -X POST http://10.79.140.67:30888/GetEmployee -d 'empid=E101'
+Found the employee with id E101 First Name  | Last Name  | ID  | Department  | Designation  | Salary  |
+Savio  |Christopher  |E101  |DevOps  |Engineer  |50000  |

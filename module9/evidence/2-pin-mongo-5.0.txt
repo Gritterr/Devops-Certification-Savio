@@ -1,0 +1,11 @@
+$ kubectl set image deployment/mongo mongo=mongo:5.0
+deployment.apps/mongo image updated
+$ kubectl rollout status deployment/mongo
+Waiting for deployment "mongo" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "mongo" rollout to finish: 1 old replicas are pending termination...
+deployment "mongo" successfully rolled out
+$ kubectl get deployment mongo -o wide
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES      SELECTOR
+mongo   1/1     1            1           60s   mongo        mongo:5.0   app=mongo
+$ kubectl exec deploy/mongo -- mongod --version | head -1
+db version v5.0.33

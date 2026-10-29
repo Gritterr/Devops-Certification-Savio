@@ -1,0 +1,39 @@
+(previous test deployment removed)
+$ kubectl get nodes
+NAME             STATUS   ROLES                  AGE     VERSION
+nebula-sc-vm-1   Ready    control-plane,master   2m56s   v1.30.6+k3s1
+
+$ ./deploy.sh
+$ set -euo pipefail
+$ MONGO_IMAGE=mongo:5.0
+$ kubectl create deployment mongo --image=mongo:5.0 --port=27017
+deployment.apps/mongo created
+$ kubectl expose deployment mongo --port=27017 --target-port=27017
+service/mongo exposed
+$ kubectl create deployment employee --image=devopsedu/employee --port=8888
+deployment.apps/employee created
+$ kubectl create service nodeport employee --tcp=8888:8888 --node-port=30888
+service/employee created
+$ kubectl rollout status deployment/mongo --timeout=180s
+Waiting for deployment "mongo" rollout to finish: 0 of 1 updated replicas are available...
+deployment "mongo" successfully rolled out
+$ kubectl rollout status deployment/employee --timeout=180s
+Waiting for deployment "employee" rollout to finish: 0 of 1 updated replicas are available...
+deployment "employee" successfully rolled out
+$ kubectl get deployments,services,pods -o wide
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES               SELECTOR
+deployment.apps/employee   1/1     1            1           2s    employee     devopsedu/employee   app=employee
+deployment.apps/mongo      1/1     1            1           2s    mongo        mongo:5.0            app=mongo
+
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE     SELECTOR
+service/employee     NodePort    10.43.172.138   <none>        8888:30888/TCP   1s      app=employee
+service/kubernetes   ClusterIP   10.43.0.1       <none>        443/TCP          2m59s   <none>
+service/mongo        ClusterIP   10.43.192.40    <none>        27017/TCP        2s      app=mongo
+
+NAME                            READY   STATUS    RESTARTS   AGE   IP          NODE             NOMINATED NODE   READINESS GATES
+pod/employee-645998d9d5-chhrh   1/1     Running   0          2s    10.42.0.9   nebula-sc-vm-1   <none>           <none>
+pod/mongo-5896b4b8f9-52g4c      1/1     Running   0          2s    10.42.0.8   nebula-sc-vm-1   <none>           <none>
+
+$ kubectl exec deploy/employee -- env | grep MONGO_SERVICE
+MONGO_SERVICE_HOST=10.43.192.40
+MONGO_SERVICE_PORT=27017

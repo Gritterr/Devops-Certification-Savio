@@ -1,0 +1,29 @@
+$ ./deploy.sh
+$ set -euo pipefail
+$ MONGO_IMAGE=mongo
+$ kubectl create deployment mongo --image=mongo --port=27017
+deployment.apps/mongo created
+$ kubectl expose deployment mongo --port=27017 --target-port=27017
+service/mongo exposed
+$ kubectl create deployment employee --image=devopsedu/employee --port=8888
+deployment.apps/employee created
+$ kubectl create service nodeport employee --tcp=8888:8888 --node-port=30888
+service/employee created
+$ kubectl rollout status deployment/mongo --timeout=180s
+Waiting for deployment "mongo" rollout to finish: 0 of 1 updated replicas are available...
+deployment "mongo" successfully rolled out
+$ kubectl rollout status deployment/employee --timeout=180s
+deployment "employee" successfully rolled out
+$ kubectl get deployments,services,pods -o wide
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES               SELECTOR
+deployment.apps/employee   1/1     1            1           15s   employee     devopsedu/employee   app=employee
+deployment.apps/mongo      1/1     1            1           16s   mongo        mongo                app=mongo
+
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE   SELECTOR
+service/employee     NodePort    10.43.37.202    <none>        8888:30888/TCP   15s   app=employee
+service/kubernetes   ClusterIP   10.43.0.1       <none>        443/TCP          67s   <none>
+service/mongo        ClusterIP   10.43.149.151   <none>        27017/TCP        15s   app=mongo
+
+NAME                            READY   STATUS    RESTARTS   AGE   IP          NODE             NOMINATED NODE   READINESS GATES
+pod/employee-645998d9d5-r4cb9   1/1     Running   0          15s   10.42.0.6   nebula-sc-vm-1   <none>           <none>
+pod/mongo-56c977b9fb-gg9lh      1/1     Running   0          16s   10.42.0.5   nebula-sc-vm-1   <none>           <none>
