@@ -1,0 +1,132 @@
+# HPA during a CPU load test: 6 parallel request loops on /generate-cpu-load for 270 s, started 15:43:38 (VM clock, UTC; 21:13:38 IST).
+# Columns: HPA name, target, current CPU / target, min, max, replicas, age; then per-pod CPU and memory (kubectl top).
+== 15:43:41
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 13%/50%   2     5     2     3m52s
+train-schedule-deployment-75564c77dd-dqrl4   2m    16Mi   
+train-schedule-deployment-75564c77dd-m52v7   2m    16Mi   
+== 15:43:59
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 2%/50%   2     5     2     4m10s
+train-schedule-deployment-75564c77dd-dqrl4   250m   24Mi   
+train-schedule-deployment-75564c77dd-m52v7   155m   17Mi   
+== 15:44:17
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 202%/50%   2     5     2     4m28s
+train-schedule-deployment-75564c77dd-dqrl4   476m   25Mi   
+train-schedule-deployment-75564c77dd-m52v7   445m   20Mi   
+== 15:44:35
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 468%/50%   2     5     5     4m46s
+train-schedule-deployment-75564c77dd-br9kt   314m   24Mi   
+train-schedule-deployment-75564c77dd-dqrl4   476m   25Mi   
+train-schedule-deployment-75564c77dd-m52v7   460m   23Mi   
+train-schedule-deployment-75564c77dd-xltlb   307m   24Mi   
+== 15:44:53
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 398%/50%   2     5     5     5m5s
+train-schedule-deployment-75564c77dd-br9kt   413m   24Mi   
+train-schedule-deployment-75564c77dd-dqrl4   413m   27Mi   
+train-schedule-deployment-75564c77dd-m52v7   371m   25Mi   
+train-schedule-deployment-75564c77dd-qz9c7   413m   19Mi   
+train-schedule-deployment-75564c77dd-xltlb   400m   21Mi   
+== 15:45:11
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 402%/50%   2     5     5     5m23s
+train-schedule-deployment-75564c77dd-br9kt   418m   25Mi   
+train-schedule-deployment-75564c77dd-dqrl4   394m   27Mi   
+train-schedule-deployment-75564c77dd-m52v7   384m   25Mi   
+train-schedule-deployment-75564c77dd-qz9c7   409m   26Mi   
+train-schedule-deployment-75564c77dd-xltlb   383m   25Mi   
+== 15:45:30
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 397%/50%   2     5     5     5m41s
+train-schedule-deployment-75564c77dd-br9kt   390m   26Mi   
+train-schedule-deployment-75564c77dd-dqrl4   378m   27Mi   
+train-schedule-deployment-75564c77dd-m52v7   371m   26Mi   
+train-schedule-deployment-75564c77dd-qz9c7   433m   26Mi   
+train-schedule-deployment-75564c77dd-xltlb   384m   26Mi   
+== 15:45:48
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 391%/50%   2     5     5     5m59s
+train-schedule-deployment-75564c77dd-br9kt   399m   27Mi   
+train-schedule-deployment-75564c77dd-dqrl4   410m   27Mi   
+train-schedule-deployment-75564c77dd-m52v7   382m   25Mi   
+train-schedule-deployment-75564c77dd-qz9c7   398m   26Mi   
+train-schedule-deployment-75564c77dd-xltlb   394m   27Mi   
+== 15:46:06
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 395%/50%   2     5     5     6m17s
+train-schedule-deployment-75564c77dd-br9kt   396m   27Mi   
+train-schedule-deployment-75564c77dd-dqrl4   412m   28Mi   
+train-schedule-deployment-75564c77dd-m52v7   381m   26Mi   
+train-schedule-deployment-75564c77dd-qz9c7   414m   27Mi   
+train-schedule-deployment-75564c77dd-xltlb   397m   27Mi   
+== 15:46:24
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 400%/50%   2     5     5     6m35s
+train-schedule-deployment-75564c77dd-br9kt   430m   27Mi   
+train-schedule-deployment-75564c77dd-dqrl4   402m   28Mi   
+train-schedule-deployment-75564c77dd-m52v7   403m   27Mi   
+train-schedule-deployment-75564c77dd-qz9c7   397m   27Mi   
+train-schedule-deployment-75564c77dd-xltlb   398m   27Mi   
+== 15:46:42
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 406%/50%   2     5     5     6m53s
+train-schedule-deployment-75564c77dd-br9kt   389m   28Mi   
+train-schedule-deployment-75564c77dd-dqrl4   402m   28Mi   
+train-schedule-deployment-75564c77dd-m52v7   379m   27Mi   
+train-schedule-deployment-75564c77dd-qz9c7   422m   27Mi   
+train-schedule-deployment-75564c77dd-xltlb   374m   27Mi   
+== 15:47:00
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 393%/50%   2     5     5     7m11s
+train-schedule-deployment-75564c77dd-br9kt   380m   28Mi   
+train-schedule-deployment-75564c77dd-dqrl4   408m   28Mi   
+train-schedule-deployment-75564c77dd-m52v7   379m   27Mi   
+train-schedule-deployment-75564c77dd-qz9c7   419m   27Mi   
+train-schedule-deployment-75564c77dd-xltlb   408m   27Mi   
+== 15:47:20
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 404%/50%   2     5     5     7m31s
+train-schedule-deployment-75564c77dd-br9kt   421m   28Mi   
+train-schedule-deployment-75564c77dd-dqrl4   395m   28Mi   
+train-schedule-deployment-75564c77dd-m52v7   376m   27Mi   
+train-schedule-deployment-75564c77dd-qz9c7   419m   27Mi   
+train-schedule-deployment-75564c77dd-xltlb   410m   27Mi   
+== 15:47:38
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 407%/50%   2     5     5     7m50s
+train-schedule-deployment-75564c77dd-br9kt   403m   27Mi   
+train-schedule-deployment-75564c77dd-dqrl4   396m   28Mi   
+train-schedule-deployment-75564c77dd-m52v7   393m   27Mi   
+train-schedule-deployment-75564c77dd-qz9c7   373m   27Mi   
+train-schedule-deployment-75564c77dd-xltlb   408m   27Mi   
+== 15:47:57
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 394%/50%   2     5     5     8m8s
+train-schedule-deployment-75564c77dd-br9kt   403m   27Mi   
+train-schedule-deployment-75564c77dd-dqrl4   396m   28Mi   
+train-schedule-deployment-75564c77dd-m52v7   349m   27Mi   
+train-schedule-deployment-75564c77dd-qz9c7   396m   27Mi   
+train-schedule-deployment-75564c77dd-xltlb   404m   28Mi   
+== 15:48:15
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 389%/50%   2     5     5     8m26s
+train-schedule-deployment-75564c77dd-br9kt   413m   27Mi   
+train-schedule-deployment-75564c77dd-dqrl4   394m   28Mi   
+train-schedule-deployment-75564c77dd-m52v7   392m   27Mi   
+train-schedule-deployment-75564c77dd-qz9c7   387m   27Mi   
+train-schedule-deployment-75564c77dd-xltlb   404m   28Mi   
+== 15:48:33
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 398%/50%   2     5     5     8m45s
+train-schedule-deployment-75564c77dd-br9kt   227m   26Mi   
+train-schedule-deployment-75564c77dd-dqrl4   328m   28Mi   
+train-schedule-deployment-75564c77dd-m52v7   215m   27Mi   
+train-schedule-deployment-75564c77dd-qz9c7   153m   27Mi   
+train-schedule-deployment-75564c77dd-xltlb   250m   27Mi   
+== 15:48:52
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 81%/50%   2     5     5     9m3s
+train-schedule-deployment-75564c77dd-br9kt   1m    26Mi   
+train-schedule-deployment-75564c77dd-dqrl4   1m    27Mi   
+train-schedule-deployment-75564c77dd-m52v7   1m    27Mi   
+train-schedule-deployment-75564c77dd-qz9c7   1m    26Mi   
+train-schedule-deployment-75564c77dd-xltlb   1m    26Mi   
+== 15:49:10
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 1%/50%   2     5     5     9m21s
+train-schedule-deployment-75564c77dd-br9kt   1m    26Mi   
+train-schedule-deployment-75564c77dd-dqrl4   1m    27Mi   
+train-schedule-deployment-75564c77dd-m52v7   1m    26Mi   
+train-schedule-deployment-75564c77dd-qz9c7   1m    26Mi   
+train-schedule-deployment-75564c77dd-xltlb   1m    26Mi   
+== 15:49:28
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 1%/50%   2     5     5     9m39s
+train-schedule-deployment-75564c77dd-br9kt   1m    26Mi   
+train-schedule-deployment-75564c77dd-dqrl4   1m    26Mi   
+train-schedule-deployment-75564c77dd-m52v7   1m    26Mi   
+train-schedule-deployment-75564c77dd-qz9c7   3m    25Mi   
+train-schedule-deployment-75564c77dd-xltlb   1m    26Mi   

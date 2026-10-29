@@ -1,0 +1,100 @@
+{
+  "uid": "train-schedule",
+  "title": "Train Schedule",
+  "description": "The Train Schedule app on Kubernetes: pods, autoscaling, CPU and memory",
+  "schemaVersion": 39,
+  "editable": true,
+  "refresh": "10s",
+  "time": { "from": "now-30m", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Pods available",
+      "gridPos": { "x": 0, "y": 0, "w": 8, "h": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "sum(kube_deployment_status_replicas_available{deployment=\"train-schedule-deployment\"})" }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Replicas wanted by the HPA (min 2, max 5)",
+      "gridPos": { "x": 8, "y": 0, "w": 8, "h": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "kube_horizontalpodautoscaler_status_desired_replicas{horizontalpodautoscaler=\"train-schedule-hpa\"}" }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "CPU, % of request (HPA target 50%)",
+      "gridPos": { "x": 16, "y": 0, "w": 8, "h": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 0,
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 50 } ] }
+        }
+      },
+      "targets": [
+        { "refId": "A", "expr": "100 * sum(rate(container_cpu_usage_seconds_total{namespace=\"default\", pod=~\"train-schedule-deployment-.*\", container=\"train-schedule\"}[1m])) / sum(kube_pod_container_resource_requests{namespace=\"default\", pod=~\"train-schedule-deployment-.*\", resource=\"cpu\"})" }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Replicas: current vs wanted by the HPA",
+      "gridPos": { "x": 0, "y": 4, "w": 12, "h": 9 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "decimals": 0, "min": 0 } },
+      "targets": [
+        { "refId": "A", "expr": "kube_horizontalpodautoscaler_status_current_replicas{horizontalpodautoscaler=\"train-schedule-hpa\"}", "legendFormat": "current" },
+        { "refId": "B", "expr": "kube_horizontalpodautoscaler_status_desired_replicas{horizontalpodautoscaler=\"train-schedule-hpa\"}", "legendFormat": "wanted" }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "CPU, % of request (HPA adds pods above 50%)",
+      "gridPos": { "x": 12, "y": 4, "w": 12, "h": 9 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "custom": { "thresholdsStyle": { "mode": "line" } },
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 50 } ] }
+        }
+      },
+      "targets": [
+        { "refId": "A", "expr": "100 * sum(rate(container_cpu_usage_seconds_total{namespace=\"default\", pod=~\"train-schedule-deployment-.*\", container=\"train-schedule\"}[1m])) / sum(kube_pod_container_resource_requests{namespace=\"default\", pod=~\"train-schedule-deployment-.*\", resource=\"cpu\"})", "legendFormat": "average CPU" }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "CPU per pod",
+      "gridPos": { "x": 0, "y": 13, "w": 12, "h": 9 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "cores", "min": 0 } },
+      "targets": [
+        { "refId": "A", "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"default\", pod=~\"train-schedule-deployment-.*\", container=\"train-schedule\"}[1m]))", "legendFormat": "{{pod}}" }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Memory per pod",
+      "gridPos": { "x": 12, "y": 13, "w": 12, "h": 9 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "bytes", "min": 0 } },
+      "targets": [
+        { "refId": "A", "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"default\", pod=~\"train-schedule-deployment-.*\", container=\"train-schedule\"})", "legendFormat": "{{pod}}" }
+      ]
+    }
+  ]
+}

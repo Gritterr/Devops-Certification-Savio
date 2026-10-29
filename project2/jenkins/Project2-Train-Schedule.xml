@@ -1,0 +1,41 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<!-- Pipeline job: the stages live in the app repo's Jenkinsfile ("Pipeline script from SCM").
+     Load with: curl -u admin:<token> -H 'Content-Type: text/xml' \
+       -\-data-binary @Project2-Train-Schedule.xml "<jenkins>/createItem?name=Project2-Train-Schedule" -->
+<flow-definition plugin="workflow-job">
+  <description>Project 2: on every commit to master, builds and tests the Train Schedule app's Docker image, pushes it to Docker Hub (saviochristopher/train-schedule) and deploys it to the k3s cluster (http://10.79.140.67:30080/). Stages are defined in the repo's Jenkinsfile.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <!-- Same trigger as the Jenkinsfile's pollSCM; set here too so polling starts before the first build -->
+        <hudson.triggers.SCMTrigger>
+          <spec>* * * * *</spec>
+          <ignorePostCommitHooks>false</ignorePostCommitHooks>
+        </hudson.triggers.SCMTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git">
+      <configVersion>2</configVersion>
+      <userRemoteConfigs>
+        <hudson.plugins.git.UserRemoteConfig>
+          <url>https://github.com/Gritterr/cicd-pipeline-train-schedule-autodeploy.git</url>
+        </hudson.plugins.git.UserRemoteConfig>
+      </userRemoteConfigs>
+      <branches>
+        <hudson.plugins.git.BranchSpec>
+          <name>*/master</name>
+        </hudson.plugins.git.BranchSpec>
+      </branches>
+      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+      <submoduleCfg class="empty-list"/>
+      <extensions/>
+    </scm>
+    <scriptPath>Jenkinsfile</scriptPath>
+    <lightweight>true</lightweight>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

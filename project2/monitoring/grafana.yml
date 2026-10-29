@@ -1,0 +1,103 @@
+# Grafana: dashboards on top of Prometheus. The Prometheus data source and the
+# "Train Schedule" dashboard are provisioned from files, so nothing is set up by hand.
+# UI: http://<node>:30030, user admin, password in the Secret "grafana-admin"
+# (created by deploy-monitoring.sh, never stored in the repo).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-provisioning
+  namespace: monitoring
+data:
+  datasources.yml: |
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      uid: prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus.monitoring.svc:9090
+      isDefault: true
+  dashboards.yml: |
+    apiVersion: 1
+    providers:
+    - name: train-schedule
+      type: file
+      options:
+        path: /etc/grafana/dashboards
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:11.3.0
+        env:
+        - name: GF_SECURITY_ADMIN_USER
+          value: admin
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: grafana-admin
+              key: password
+        - name: GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH
+          value: /etc/grafana/dashboards/train-schedule-dashboard.json
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
+        volumeMounts:
+        - name: provisioning
+          mountPath: /etc/grafana/provisioning/datasources/datasources.yml
+          subPath: datasources.yml
+        - name: provisioning
+          mountPath: /etc/grafana/provisioning/dashboards/dashboards.yml
+          subPath: dashboards.yml
+        - name: dashboards
+          mountPath: /etc/grafana/dashboards
+      volumes:
+      - name: provisioning
+        configMap:
+          name: grafana-provisioning
+      - name: dashboards
+        configMap:
+          name: grafana-dashboards   # created from train-schedule-dashboard.json
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  type: NodePort
+  selector:
+    app: grafana
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30030

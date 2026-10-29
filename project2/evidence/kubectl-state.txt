@@ -1,0 +1,49 @@
+== 2026-10-29 15:55:25 UTC, after the load test
+
+$ kubectl get deploy,rs,pods,svc,hpa -l app=train-schedule -o wide
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS       IMAGES                              SELECTOR
+deployment.apps/train-schedule-deployment   2/2     2            2           15m   train-schedule   saviochristopher/train-schedule:2   app=train-schedule
+
+NAME                                                   DESIRED   CURRENT   READY   AGE   CONTAINERS       IMAGES                              SELECTOR
+replicaset.apps/train-schedule-deployment-75564c77dd   2         2         2       12m   train-schedule   saviochristopher/train-schedule:2   app=train-schedule,pod-template-hash=75564c77dd
+replicaset.apps/train-schedule-deployment-858f5d6589   0         0         0       15m   train-schedule   saviochristopher/train-schedule:1   app=train-schedule,pod-template-hash=858f5d6589
+
+NAME                                             READY   STATUS    RESTARTS   AGE   IP           NODE             NOMINATED NODE   READINESS GATES
+pod/train-schedule-deployment-75564c77dd-br9kt   1/1     Running   0          11m   10.42.0.17   nebula-sc-vm-1   <none>           <none>
+pod/train-schedule-deployment-75564c77dd-dqrl4   1/1     Running   0          12m   10.42.0.16   nebula-sc-vm-1   <none>           <none>
+
+$ kubectl get hpa train-schedule-hpa
+NAME                 REFERENCE                              TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+train-schedule-hpa   Deployment/train-schedule-deployment   cpu: 1%/50%   2         5         2          15m
+
+$ kubectl get events --field-selector involvedObject.name=train-schedule-hpa
+LAST SEEN   TYPE      REASON                         OBJECT                                       MESSAGE
+15m         Normal    SuccessfulRescale              horizontalpodautoscaler/train-schedule-hpa   New size: 2; reason: Current number of replicas below Spec.MinReplicas
+12m         Warning   FailedGetResourceMetric        horizontalpodautoscaler/train-schedule-hpa   failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)
+12m         Warning   FailedComputeMetricsReplicas   horizontalpodautoscaler/train-schedule-hpa   invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)
+11m         Normal    SuccessfulRescale              horizontalpodautoscaler/train-schedule-hpa   New size: 4; reason: cpu resource utilization (percentage of request) above target
+11m         Normal    SuccessfulRescale              horizontalpodautoscaler/train-schedule-hpa   New size: 5; reason: cpu resource utilization (percentage of request) above target
+96s         Normal    SuccessfulRescale              horizontalpodautoscaler/train-schedule-hpa   New size: 2; reason: All metrics below target
+
+$ kubectl rollout history deployment/train-schedule-deployment
+deployment.apps/train-schedule-deployment 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+
+$ kubectl -n monitoring get deploy,pods,svc
+NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/grafana              1/1     1            1           19m
+deployment.apps/kube-state-metrics   1/1     1            1           19m
+deployment.apps/prometheus           1/1     1            1           19m
+
+NAME                                      READY   STATUS    RESTARTS   AGE
+pod/grafana-97b58b599-pbh57               1/1     Running   0          19m
+pod/kube-state-metrics-5797855f87-8qpcs   1/1     Running   0          19m
+pod/prometheus-75dfdfbcdf-6g5r4           1/1     Running   0          19m
+
+NAME                         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+service/grafana              NodePort    10.43.31.5     <none>        3000:30030/TCP   19m
+service/kube-state-metrics   ClusterIP   10.43.90.132   <none>        8080/TCP         19m
+service/prometheus           NodePort    10.43.9.241    <none>        9090:30090/TCP   19m

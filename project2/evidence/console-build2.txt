@@ -1,0 +1,219 @@
+Started by an SCM change
+Obtained Jenkinsfile from git https://github.com/Gritterr/cicd-pipeline-train-schedule-autodeploy.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on test-server in /home/admin/jenkins-agent/workspace/Project2-Train-Schedule
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Fetching changes from the remote Git repository
+ > git rev-parse --resolve-git-dir /home/admin/jenkins-agent/workspace/Project2-Train-Schedule/.git # timeout=10
+ > git config remote.origin.url https://github.com/Gritterr/cicd-pipeline-train-schedule-autodeploy.git # timeout=10
+Fetching upstream changes from https://github.com/Gritterr/cicd-pipeline-train-schedule-autodeploy.git
+ > git --version # timeout=10
+ > git --version # 'git version 1.8.3.1'
+ > git fetch --tags --progress https://github.com/Gritterr/cicd-pipeline-train-schedule-autodeploy.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Checking out Revision 190df8636711b55b33550efe4cb2f23833052924 (refs/remotes/origin/master)
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 190df8636711b55b33550efe4cb2f23833052924 # timeout=10
+Commit message: "Show the deployed build number on the home page"
+ > git rev-list --no-walk 15737bb4ac45aa3d24439d4785d43dd2566704a7 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build & Test Image)
+[Pipeline] sh
++ docker build -t saviochristopher/train-schedule:2 -t saviochristopher/train-schedule:latest .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 592B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20-alpine
+#2 DONE 0.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 101B done
+#3 DONE 0.0s
+
+#4 [stage-1 1/3] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 2.00kB done
+#5 DONE 0.0s
+
+#6 [stage-1 2/3] WORKDIR /usr/src/app
+#6 CACHED
+
+#7 [build 3/6] COPY package*.json ./
+#7 CACHED
+
+#8 [build 4/6] RUN npm ci
+#8 CACHED
+
+#9 [build 5/6] COPY . .
+#9 DONE 0.0s
+
+#10 [build 6/6] RUN npm test && npm prune --omit=dev
+#10 0.553 
+#10 0.553 > cicd-pipeline-train-schedule-git@0.0.0 test
+#10 0.553 > ./node_modules/.bin/mocha
+#10 0.553 
+#10 0.937 
+#10 0.938 
+#10 0.940   Index Page
+#10 1.217 [0mGET / [32m200 [0m254.194 ms - 958[0m
+#10 1.230     ✓ renders successfully (290ms)
+#10 1.232 
+#10 1.232   Trains API
+#10 1.238 [0mGET /trains [32m200 [0m2.763 ms - 1093[0m
+#10 1.240     ✓ returns data successfully
+#10 1.240 
+#10 1.241 
+#10 1.241   2 passing (305ms)
+#10 1.241 
+#10 2.237 npm warn old lockfile
+#10 2.237 npm warn old lockfile The package-lock.json file was created with an old version of npm,
+#10 2.237 npm warn old lockfile so supplemental metadata must be fetched from the registry.
+#10 2.237 npm warn old lockfile
+#10 2.237 npm warn old lockfile This is a one-time fix-up, please be patient...
+#10 2.237 npm warn old lockfile
+#10 5.775 
+#10 5.775 up to date, audited 630 packages in 4s
+#10 5.910 
+#10 5.910 82 vulnerabilities (8 low, 16 moderate, 40 high, 18 critical)
+#10 5.910 
+#10 5.910 To address issues that do not require attention, run:
+#10 5.910   npm audit fix
+#10 5.910 
+#10 5.910 To address all issues (including breaking changes), run:
+#10 5.910   npm audit fix --force
+#10 5.910 
+#10 5.910 Run `npm audit` for details.
+#10 DONE 6.0s
+
+#6 [stage-1 2/3] WORKDIR /usr/src/app
+#6 CACHED
+
+#11 [stage-1 3/3] COPY --from=build /usr/src/app ./
+#11 DONE 1.1s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 0.8s done
+#12 writing image sha256:c607bafc9accdc7ddbdbd26c2ca1a5321b9cfdf0c7fba452c297d8b6e2fac07d done
+#12 naming to docker.io/saviochristopher/train-schedule:2 done
+#12 naming to docker.io/saviochristopher/train-schedule:latest done
+#12 DONE 0.8s
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Push to Docker Hub)
+[Pipeline] withCredentials
+Masking supported pattern matches of $DOCKER_TOKEN
+[Pipeline] {
+[Pipeline] sh
++ export DOCKER_CONFIG=/home/admin/jenkins-agent/workspace/Project2-Train-Schedule@tmp/docker
++ DOCKER_CONFIG=/home/admin/jenkins-agent/workspace/Project2-Train-Schedule@tmp/docker
++ trap 'docker logout >/dev/null; rm -rf "$DOCKER_CONFIG"' EXIT
++ echo ****
++ docker login -u saviochristopher --password-stdin
+WARNING! Your password will be stored unencrypted in /home/admin/jenkins-agent/workspace/Project2-Train-Schedule@tmp/docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
++ docker push saviochristopher/train-schedule:2
+The push refers to repository [docker.io/saviochristopher/train-schedule]
+12fdd8466a96: Preparing
+d3c29cc818aa: Preparing
+afa543f85b46: Preparing
+e10358715ead: Preparing
+4983b93ee796: Preparing
+29df493baa13: Preparing
+29df493baa13: Waiting
+d3c29cc818aa: Layer already exists
+4983b93ee796: Layer already exists
+afa543f85b46: Layer already exists
+e10358715ead: Layer already exists
+29df493baa13: Layer already exists
+12fdd8466a96: Pushed
+2: digest: sha256:63db1c5c29802586cc68b6ab53239fde18ba8cbc34577cd44da2026aafd1ecaa size: 1576
++ docker push saviochristopher/train-schedule:latest
+The push refers to repository [docker.io/saviochristopher/train-schedule]
+12fdd8466a96: Preparing
+d3c29cc818aa: Preparing
+afa543f85b46: Preparing
+e10358715ead: Preparing
+4983b93ee796: Preparing
+29df493baa13: Preparing
+29df493baa13: Waiting
+12fdd8466a96: Layer already exists
+e10358715ead: Layer already exists
+afa543f85b46: Layer already exists
+d3c29cc818aa: Layer already exists
+4983b93ee796: Layer already exists
+29df493baa13: Layer already exists
+latest: digest: sha256:63db1c5c29802586cc68b6ab53239fde18ba8cbc34577cd44da2026aafd1ecaa size: 1576
++ docker logout
++ rm -rf /home/admin/jenkins-agent/workspace/Project2-Train-Schedule@tmp/docker
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy to Kubernetes)
+[Pipeline] sh
++ export KUBECONFIG=/home/admin/.kube/config
++ KUBECONFIG=/home/admin/.kube/config
++ envsubst '$DOCKER_IMAGE_NAME $BUILD_NUMBER'
++ kubectl apply -f -
+service/train-schedule-service unchanged
+deployment.apps/train-schedule-deployment configured
+horizontalpodautoscaler.autoscaling/train-schedule-hpa unchanged
++ kubectl rollout status deployment/train-schedule-deployment --timeout=180s
+Waiting for deployment "train-schedule-deployment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "train-schedule-deployment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "train-schedule-deployment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "train-schedule-deployment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "train-schedule-deployment" rollout to finish: 1 old replicas are pending termination...
+deployment "train-schedule-deployment" successfully rolled out
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Smoke Test)
+[Pipeline] sh
++ grep -q 'build 2'
++ curl -fsS http://localhost:30080/
++ curl -fsS http://localhost:30080/trains
++ grep -q '"name"'
++ echo 'Deployed saviochristopher/train-schedule:2: http://10.79.140.67:30080/'
+Deployed saviochristopher/train-schedule:2: http://10.79.140.67:30080/
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] sh
++ docker rmi saviochristopher/train-schedule:2
++ docker image prune -f
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
